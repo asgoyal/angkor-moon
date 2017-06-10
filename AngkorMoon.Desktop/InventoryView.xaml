@@ -1,0 +1,51 @@
+﻿<Window x:Class="AngkorMoon.Desktop.InventoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AngkorMoon.Desktop"
+        xmlns:item="clr-namespace:AngkorMoon.Desktop.ViewModules.Items"
+        xmlns:part="clr-namespace:AngkorMoon.Desktop.ViewModules.Parts"
+        xmlns:iwiz="clr-namespace:AngkorMoon.Desktop.ViewModules.ItemWizard"
+        mc:Ignorable="d"
+        Title="Angkor Moon Inventory" Height="350" Width="525" WindowState="Maximized">
+    <Window.DataContext>
+        <local:InventoryViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type item:ItemListViewModel}">
+            <item:ItemListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type part:PartListViewModel}">
+            <part:PartListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type iwiz:ItemEditorViewModel}">
+            <iwiz:ItemEditorView />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="NavBar">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Items"
+                    Command="{Binding NavCommand}"
+                    CommandParameter="Items"
+                    Grid.Column="0" />
+            <Button Content="Item Wizard"
+                    Command="{Binding NavCommand}"
+                    CommandParameter="ItemWizard"
+                    Grid.Column="2" />
+        </Grid>
+        <Grid x:Name="InventoryContent"
+              Grid.Row="1">
+            <ContentControl Content="{Binding CurrentViewModel}" />
+        </Grid>
+    </Grid>
+</Window>
