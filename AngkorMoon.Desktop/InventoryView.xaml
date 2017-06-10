@@ -9,9 +9,6 @@
         xmlns:iwiz="clr-namespace:AngkorMoon.Desktop.ViewModules.ItemWizard"
         mc:Ignorable="d"
         Title="Angkor Moon Inventory" Height="350" Width="525" WindowState="Maximized">
-    <Window.DataContext>
-        <local:InventoryViewModel />
-    </Window.DataContext>
     <Window.Resources>
         <DataTemplate DataType="{x:Type item:ItemListViewModel}">
             <item:ItemListView />

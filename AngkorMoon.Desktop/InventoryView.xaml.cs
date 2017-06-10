@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AngkorMoon.Desktop.Utils.Helpers;
+using Microsoft.Practices.Unity;
 
 namespace AngkorMoon.Desktop
 {
@@ -23,6 +25,7 @@ namespace AngkorMoon.Desktop
         public InventoryView()
         {
             InitializeComponent();
+            this.DataContext = ContainerHelper.Container.Resolve<InventoryViewModel>();
         }
     }
 }

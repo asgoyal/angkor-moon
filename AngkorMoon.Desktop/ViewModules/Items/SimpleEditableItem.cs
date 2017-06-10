@@ -4,12 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils;
 
 namespace AngkorMoon.Desktop.ViewModules.Items
 {
     public class SimpleEditableItem : BindableBase
     {
+        public SimpleEditableItem(ICommandHandler commandHandler)
+            : base(commandHandler)
+        {
+        }
+
         private long _itemId;
         public long ItemId
         {

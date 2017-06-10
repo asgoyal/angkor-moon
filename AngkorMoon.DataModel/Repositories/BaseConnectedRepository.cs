@@ -16,6 +16,7 @@ namespace AngkorMoon.DataModel.Repositories
         public abstract T Get(long id);
         public abstract IQueryable<T> GetAll();
         public abstract T New<TSub>() where TSub : T;
+        public abstract Task<IList<T>> GetAllAsync();
 
         public virtual void Save()
         {

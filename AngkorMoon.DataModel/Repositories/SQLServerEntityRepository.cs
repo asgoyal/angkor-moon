@@ -37,7 +37,7 @@ namespace AngkorMoon.DataModel.Repositories
             return DbSet.AsQueryable<TEntity>();
         }
 
-        public async Task<IList<TEntity>> GetAllAsync()
+        public override async Task<IList<TEntity>> GetAllAsync()
         {
             return await GetAll().ToListAsync();
         }

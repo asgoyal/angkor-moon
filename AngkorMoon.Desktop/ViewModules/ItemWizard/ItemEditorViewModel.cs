@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AngkorMoon.DataModel.Models;
 using AngkorMoon.DataModel.Repositories;
+using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils;
 using AngkorMoon.Desktop.Utils.Commands;
 using AngkorMoon.Desktop.Utils.Constants;
@@ -14,14 +15,15 @@ namespace AngkorMoon.Desktop.ViewModules.ItemWizard
 {
     class ItemEditorViewModel : BindableBase
     {
-        private ItemRepository _itemRepository;
+        private IItemRepository _itemRepository;
 
         public RelayCommand SaveCommand { get; private set; }
         public RelayCommand CancelCommand { get; private set; }
 
         public event Action<string> Done = delegate { };
 
-        public ItemEditorViewModel(ItemRepository itemRepository)
+        public ItemEditorViewModel(ICommandHandler commandHandler, IItemRepository itemRepository)
+            : base(commandHandler)
         {
             _itemRepository = itemRepository;
             CancelCommand = new RelayCommand(OnCancel);
@@ -46,7 +48,7 @@ namespace AngkorMoon.Desktop.ViewModules.ItemWizard
         public void SetItem(Item item)
         {
             _editingItem = item;
-            Item = new SimpleEditableItem();
+            Item = new SimpleEditableItem(this.CommandHandler);
             CopyItem(item, Item);
         }
 

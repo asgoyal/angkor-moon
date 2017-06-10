@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using AngkorMoon.DataModel.DatabaseContexts;
 using AngkorMoon.DataModel.Models;
 using AngkorMoon.DataModel.Repositories;
+using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils;
 using AngkorMoon.Desktop.Utils.Commands;
 using AngkorMoon.Desktop.Utils.Constants;
+using AngkorMoon.Desktop.Utils.Helpers;
 using AngkorMoon.Desktop.ViewModules.Items;
 using AngkorMoon.Desktop.ViewModules.ItemWizard;
 using AngkorMoon.Desktop.ViewModules.Parts;
+using Microsoft.Practices.Unity;
 
 namespace AngkorMoon.Desktop
 {
@@ -21,8 +24,7 @@ namespace AngkorMoon.Desktop
         private ItemListViewModel _itemListViewModel;
         private PartListViewModel _partListViewModel;
         private ItemEditorViewModel _itemEditorViewModel;
-        // TODO ItemRepository should be passed through dependency injection
-        ItemRepository _ItemRepo = ItemRepository.Instance;
+        private IItemRepository _itemRepo;
 
         private BindableBase _currentViewModel;
 
@@ -34,14 +36,16 @@ namespace AngkorMoon.Desktop
             set { SetProperty(ref _currentViewModel, value); }
         }
 
-        public InventoryViewModel()
+        public InventoryViewModel(ICommandHandler commandHandler, IItemRepository itemRepo)
+            : base(commandHandler)
         {
             // NOTE this is very important for database to work
             Database.SetInitializer<SQLServerDbContext>(new DropCreateDatabaseIfModelChanges<SQLServerDbContext>());
 
-            _itemListViewModel = new ItemListViewModel(_ItemRepo);
-            _partListViewModel = new PartListViewModel();
-            _itemEditorViewModel = new ItemEditorViewModel(_ItemRepo);
+            _itemRepo = itemRepo;
+            _itemListViewModel = ContainerHelper.Container.Resolve<ItemListViewModel>();
+            _partListViewModel = ContainerHelper.Container.Resolve<PartListViewModel>();
+            _itemEditorViewModel = ContainerHelper.Container.Resolve<ItemEditorViewModel>();
 
             NavCommand = new RelayCommand<string>(OnNav);
 
@@ -49,8 +53,12 @@ namespace AngkorMoon.Desktop
             _itemListViewModel.EditItemRequested += NavToEditItemViewModel;
             _itemListViewModel.NavRequested += OnNav;
             _itemEditorViewModel.Done += OnNav;
+        }
 
-            Command.RegisterAction<string>("AddItemCommand", OnNav);
+        protected override void RegisterActions(ICommandHandler handler)
+        {
+            base.RegisterActions(handler);
+            handler.RegisterAction<string>("AddItemCommand", OnNav);
         }
 
         private void OnNav(string destination)
@@ -59,7 +67,7 @@ namespace AngkorMoon.Desktop
             {
                 case ViewNames.ItemAddView:
                     _itemEditorViewModel.EditMode = false;
-                    _itemEditorViewModel.SetItem(_ItemRepo.New<Jewelry>());
+                    _itemEditorViewModel.SetItem(_itemRepo.New<Jewelry>());
                     CurrentViewModel = _itemEditorViewModel;
                     break;
                 case ViewNames.PartListView:
@@ -75,7 +83,7 @@ namespace AngkorMoon.Desktop
         private void NavToEditItemViewModel(Item item)
         {
             _itemEditorViewModel.EditMode = true;
-            _itemEditorViewModel.SetItem(_ItemRepo.Get(item.ItemId));
+            _itemEditorViewModel.SetItem(_itemRepo.Get(item.ItemId));
             CurrentViewModel = _itemEditorViewModel;
         }
     }

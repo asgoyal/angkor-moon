@@ -17,6 +17,8 @@ namespace AngkorMoon.DataModel.Repositories
 
         IQueryable<T> GetAll();
 
+        Task<IList<T>> GetAllAsync();
+
         void Save();
 
         T New<TSub>() where TSub : T;

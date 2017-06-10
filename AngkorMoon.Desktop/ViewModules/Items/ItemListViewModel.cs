@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AngkorMoon.DataModel.Models;
 using AngkorMoon.DataModel.Repositories;
+using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils;
 using AngkorMoon.Desktop.Utils.Commands;
 using AngkorMoon.Desktop.Utils.Constants;
@@ -14,10 +15,11 @@ namespace AngkorMoon.Desktop.ViewModules.Items
 {
     class ItemListViewModel : BindableBase
     {
-        private ItemRepository _itemRepository;
+        private IItemRepository _itemRepository;
         private ObservableCollection<Item> _items;
 
-        public ItemListViewModel(ItemRepository itemRepository)
+        public ItemListViewModel(ICommandHandler commandHandler, IItemRepository itemRepository)
+            : base(commandHandler)
         {
             _itemRepository = itemRepository;
             NavCommand = new RelayCommand<string>(OnNav);

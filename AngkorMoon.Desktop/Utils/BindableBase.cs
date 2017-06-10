@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils.Commands;
 
 namespace AngkorMoon.Desktop.Utils
@@ -16,9 +17,14 @@ namespace AngkorMoon.Desktop.Utils
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public BindableBase()
+        private ICommandHandler _commandHandler;
+        protected ICommandHandler CommandHandler => _commandHandler;
+
+        public BindableBase(ICommandHandler commandHandler)
         {
-            Command = new InterpretingCommand();
+            _commandHandler = commandHandler;
+            RegisterActions(CommandHandler);
+            Command = new InterpretingCommand(_commandHandler);
         }
 
         protected virtual void SetProperty<T>(ref T member, T val,
@@ -36,6 +42,11 @@ namespace AngkorMoon.Desktop.Utils
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void RegisterActions(ICommandHandler handler)
+        {
+            return;
         }
     }
 }

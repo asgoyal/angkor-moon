@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using AngkorMoon.Desktop.Services;
 
 namespace AngkorMoon.Desktop.Utils
 {
@@ -16,6 +17,11 @@ namespace AngkorMoon.Desktop.Utils
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         
+        public ValidatableBindableBase(ICommandHandler commandHandler)
+            : base(commandHandler)
+        {
+        }
+
         public bool HasErrors
         {
             get
