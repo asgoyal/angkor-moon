@@ -86,6 +86,7 @@
     <Compile Include="Services\ICommandHandler.cs" />
     <Compile Include="Utils\BindableBase.cs" />
     <Compile Include="Utils\Commands\RelayCommand.cs" />
+    <Compile Include="Utils\Constants\CommandNames.cs" />
     <Compile Include="Utils\Constants\ViewNames.cs" />
     <Compile Include="Utils\Converters\CommandParamterConverter.cs" />
     <Compile Include="Utils\Converters\NegatableBooleanToVisibilityConverter.cs" />

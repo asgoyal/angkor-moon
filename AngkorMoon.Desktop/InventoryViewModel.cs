@@ -9,7 +9,6 @@ using AngkorMoon.DataModel.Models;
 using AngkorMoon.DataModel.Repositories;
 using AngkorMoon.Desktop.Services;
 using AngkorMoon.Desktop.Utils;
-using AngkorMoon.Desktop.Utils.Commands;
 using AngkorMoon.Desktop.Utils.Constants;
 using AngkorMoon.Desktop.Utils.Helpers;
 using AngkorMoon.Desktop.ViewModules.Items;
@@ -28,8 +27,6 @@ namespace AngkorMoon.Desktop
 
         private BindableBase _currentViewModel;
 
-        public RelayCommand<string> NavCommand { get; private set; }
-
         public BindableBase CurrentViewModel
         {
             get { return _currentViewModel; }
@@ -46,10 +43,7 @@ namespace AngkorMoon.Desktop
             _itemListViewModel = ContainerHelper.Container.Resolve<ItemListViewModel>();
             _partListViewModel = ContainerHelper.Container.Resolve<PartListViewModel>();
             _itemEditorViewModel = ContainerHelper.Container.Resolve<ItemEditorViewModel>();
-
-            NavCommand = new RelayCommand<string>(OnNav);
-
-            _itemListViewModel.AddItemRequested += OnNav;
+            
             _itemListViewModel.EditItemRequested += NavToEditItemViewModel;
             _itemListViewModel.NavRequested += OnNav;
             _itemEditorViewModel.Done += OnNav;
@@ -59,6 +53,8 @@ namespace AngkorMoon.Desktop
         {
             base.RegisterActions(handler);
             handler.RegisterAction<string>("AddItemCommand", OnNav);
+            handler.RegisterAction<string>("ItemListCommand", OnNav);
+            handler.RegisterAction<Item>("EditItemCommand", NavToEditItemViewModel);
         }
 
         private void OnNav(string destination)

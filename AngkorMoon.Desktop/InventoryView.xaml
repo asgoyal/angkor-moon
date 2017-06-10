@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AngkorMoon.Desktop"
+        xmlns:const="clr-namespace:AngkorMoon.Desktop.Utils.Constants"
+        xmlns:conv="clr-namespace:AngkorMoon.Desktop.Utils.Converters"
         xmlns:item="clr-namespace:AngkorMoon.Desktop.ViewModules.Items"
         xmlns:part="clr-namespace:AngkorMoon.Desktop.ViewModules.Parts"
         xmlns:iwiz="clr-namespace:AngkorMoon.Desktop.ViewModules.ItemWizard"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Angkor Moon Inventory" Height="350" Width="525" WindowState="Maximized">
     <Window.Resources>
@@ -19,6 +22,8 @@
         <DataTemplate DataType="{x:Type iwiz:ItemEditorViewModel}">
             <iwiz:ItemEditorView />
         </DataTemplate>
+        <conv:CommandParamterConverter x:Key="CommandParameterConverter" />
+        <System:String x:Key="ItemListCommand">ItemListCommand</System:String>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -32,9 +37,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Content="Items"
-                    Command="{Binding NavCommand}"
-                    CommandParameter="Items"
-                    Grid.Column="0" />
+                    Command="{Binding Command}"
+                    Grid.Column="0" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CommandParameterConverter}">
+                        <Binding Source="{StaticResource ItemListCommand}" />
+                        <Binding Source="{x:Static const:ViewNames.ItemListView}" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
             <Button Content="Item Wizard"
                     Command="{Binding NavCommand}"
                     CommandParameter="ItemWizard"

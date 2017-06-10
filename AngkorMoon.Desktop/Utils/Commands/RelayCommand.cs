@@ -79,11 +79,11 @@ namespace AngkorMoon.Desktop.Utils.Commands
 
     public class InterpretingCommand : ICommand
     {
-        private ICommandHandler _commandHandler;
+        private ICommand _commandHandler;
 
         public event EventHandler CanExecuteChanged = delegate { };
 
-        public InterpretingCommand(ICommandHandler commandHandler)
+        public InterpretingCommand(ICommand commandHandler)
         {
             _commandHandler = commandHandler;
         }

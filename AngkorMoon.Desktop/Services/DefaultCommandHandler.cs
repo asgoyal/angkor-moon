@@ -5,7 +5,7 @@ using AngkorMoon.Desktop.Utils.Commands;
 
 namespace AngkorMoon.Desktop.Services
 {
-    public class DefaultCommandHandler : ICommandHandler
+    public class DefaultCommandHandler : ICommandHandler, ICommand
     {
         private IDictionary<string, ICommand> _commands = new Dictionary<string, ICommand>();
 

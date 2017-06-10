@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace AngkorMoon.Desktop.Services
 {
-    public interface ICommandHandler : ICommand
+    public interface ICommandHandler
     {
         ICommand RegisterCommand(string commandName, ICommand command);
         ICommand RegisterAction<TParam>(string commandName, Action<TParam> action);

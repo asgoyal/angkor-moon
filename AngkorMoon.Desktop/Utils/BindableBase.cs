@@ -24,7 +24,7 @@ namespace AngkorMoon.Desktop.Utils
         {
             _commandHandler = commandHandler;
             RegisterActions(CommandHandler);
-            Command = new InterpretingCommand(_commandHandler);
+            Command = new InterpretingCommand(_commandHandler as ICommand);
         }
 
         protected virtual void SetProperty<T>(ref T member, T val,

@@ -48,7 +48,6 @@ namespace AngkorMoon.Desktop.ViewModules.Items
         public RelayCommand<Item> EditItemCommand { get; private set; }
 
         public event Action<string> NavRequested = delegate { };
-        public event Action<string> AddItemRequested = delegate { };
         public event Action<Item> EditItemRequested = delegate { };
 
         private void OnNav(string destination)
