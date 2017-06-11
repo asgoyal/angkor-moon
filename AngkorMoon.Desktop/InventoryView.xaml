@@ -23,7 +23,6 @@
             <iwiz:ItemEditorView />
         </DataTemplate>
         <conv:CommandParamterConverter x:Key="CommandParameterConverter" />
-        <System:String x:Key="ItemListCommand">ItemListCommand</System:String>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -41,7 +40,7 @@
                     Grid.Column="0" >
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource CommandParameterConverter}">
-                        <Binding Source="{StaticResource ItemListCommand}" />
+                        <Binding Source="{x:Static const:CommandNames.ItemListCommand}" />
                         <Binding Source="{x:Static const:ViewNames.ItemListView}" />
                     </MultiBinding>
                 </Button.CommandParameter>

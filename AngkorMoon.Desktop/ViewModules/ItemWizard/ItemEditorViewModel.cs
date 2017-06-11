@@ -16,32 +16,17 @@ namespace AngkorMoon.Desktop.ViewModules.ItemWizard
     class ItemEditorViewModel : BindableBase
     {
         private IItemRepository _itemRepository;
-
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        public event Action<string> Done = delegate { };
-
+        
         public ItemEditorViewModel(ICommandHandler commandHandler, IItemRepository itemRepository)
             : base(commandHandler)
         {
             _itemRepository = itemRepository;
-            CancelCommand = new RelayCommand(OnCancel);
-            SaveCommand = new RelayCommand(OnSave, CanSave);
         }
 
         private bool _editMode;
         public bool EditMode
-        {
-            get
-            {
-                return _editMode;
-            }
-
-            set
-            {
-                SetProperty(ref _editMode, value);
-            }
+        { get{ return _editMode; }
+          set{ SetProperty(ref _editMode, value); }
         }
 
         private Item _editingItem = null;
@@ -59,6 +44,12 @@ namespace AngkorMoon.Desktop.ViewModules.ItemWizard
             set { SetProperty(ref _item, value); }
         }
 
+        protected override void RegisterActions(ICommandHandler handler)
+        {
+            handler.RegisterAction(CommandNames.CancelCommand, OnCancel);
+            handler.RegisterAction(CommandNames.SaveCommand, OnSave);
+        }
+
         private void CopyItem(Item source, SimpleEditableItem target)
         {
             target.ItemId = source.ItemId;
@@ -73,21 +64,17 @@ namespace AngkorMoon.Desktop.ViewModules.ItemWizard
             }
         }
 
-        private bool CanSave()
-        {
-            return true;
-        }
-
         private void OnSave()
         {
             UpdateItem(Item, _editingItem);
             _itemRepository.Save();
-            Done(ViewNames.ItemListView);
+            CommandHandler.DelegateAction(CommandNames.NavCommand, ViewNames.ItemListView);
         }
 
         private void OnCancel()
         {
-            Done(ViewNames.ItemListView);
+            _editingItem.IsDirty = true;
+            CommandHandler.DelegateAction(CommandNames.NavCommand, ViewNames.ItemListView);
         }
 
         private void UpdateItem(SimpleEditableItem source, Item target)

@@ -23,7 +23,6 @@ namespace AngkorMoon.Desktop.ViewModules.Items
         {
             _itemRepository = itemRepository;
             NavCommand = new RelayCommand<string>(OnNav);
-            EditItemCommand = new RelayCommand<Item>(OnEditItem);
         }
 
         public ObservableCollection<Item> Items
@@ -45,19 +44,12 @@ namespace AngkorMoon.Desktop.ViewModules.Items
         }
 
         public RelayCommand<string> NavCommand { get; private set; }
-        public RelayCommand<Item> EditItemCommand { get; private set; }
 
         public event Action<string> NavRequested = delegate { };
-        public event Action<Item> EditItemRequested = delegate { };
 
         private void OnNav(string destination)
         {
             NavRequested(ViewNames.PartListView);
-        }
-
-        private void OnEditItem(Item item)
-        {
-            EditItemRequested(item);
         }
     }
 }

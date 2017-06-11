@@ -13,16 +13,16 @@ namespace AngkorMoon.Desktop.Services
 
         public bool CanExecute(object parameter)
         {
+            if (parameter == null)
+            {
+                return true;
+            }
+
             Tuple<string, object> parameters = parameter as Tuple<string, object>;
             string commandName = parameters.Item1;
             object parameterToPass = parameters.Item2;
-            ICommand command;
-            if (!_commands.TryGetValue(commandName, out command))
-            {
-                return false;
-            }
-
-            return command.CanExecute(parameterToPass);
+            
+            return getCommand(commandName).CanExecute(parameterToPass);
         }
 
         public void Execute(object parameter)
@@ -30,13 +30,8 @@ namespace AngkorMoon.Desktop.Services
             Tuple<string, object> parameters = parameter as Tuple<string, object>;
             string commandName = parameters.Item1;
             object parameterToPass = parameters.Item2;
-            ICommand command;
-            if (!_commands.TryGetValue(commandName, out command))
-            {
-                throw new ArgumentException("Invalid Command: " + commandName + " not found");
-            }
 
-            command.Execute(parameterToPass);
+            getCommand(commandName).Execute(parameterToPass);
         }
 
         public ICommand RegisterCommand(string commandName, ICommand command)
@@ -51,14 +46,34 @@ namespace AngkorMoon.Desktop.Services
             return command;
         }
 
-        public ICommand RegisterAction<TParam>(string commandName, Action<TParam> action)
+        public ICommand RegisterAction<TParam>(string commandName, Action<TParam> action, Func<bool> canExecute = null)
         {
-            return RegisterCommand(commandName, new RelayCommand<TParam>(action));
+            return RegisterCommand(commandName, new RelayCommand<TParam>(action, canExecute));
         }
 
-        public ICommand RegisterAction(string commandName, Action action)
+        public ICommand RegisterAction(string commandName, Action action, Func<bool> canExecute = null)
         {
-            return RegisterCommand(commandName, new RelayCommand(action));
+            return RegisterCommand(commandName, new RelayCommand(action, canExecute));
+        }
+
+        private ICommand getCommand(string commandName)
+        {
+            ICommand command;
+            if (!_commands.TryGetValue(commandName, out command))
+            {
+                throw new ArgumentException("Invalid Command: " + commandName + " not found");
+            }
+
+            return command;
+        }
+
+        public void DelegateAction(string commandName, object parameter)
+        {
+            ICommand command = getCommand(commandName);
+            if(command.CanExecute(parameter))
+            {
+                command.Execute(parameter);
+            }
         }
     }
 }
