@@ -10,7 +10,8 @@ namespace AngkorMoon.Desktop.Services
     public interface ICommandHandler
     {
         ICommand RegisterCommand(string commandName, ICommand command);
-        ICommand RegisterAction<TParam>(string commandName, Action<TParam> action);
-        ICommand RegisterAction(string commandName, Action action);
+        ICommand RegisterAction<TParam>(string commandName, Action<TParam> action, Func<bool> canExecute = null);
+        ICommand RegisterAction(string commandName, Action action, Func<bool> canExecute = null);
+        void DelegateAction(string commandName, object parameter);
     }
 }

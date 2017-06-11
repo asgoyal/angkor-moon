@@ -14,7 +14,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <conv:CommandParamterConverter x:Key="CommandParameterConverter" />
-        <System:String x:Key="AddItemCommand">AddItemCommand</System:String>
     </UserControl.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -32,7 +31,7 @@
                     HorizontalAlignment="Left" >
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource CommandParameterConverter}">
-                        <Binding Source="{StaticResource AddItemCommand}" />
+                        <Binding Source="{x:Static const:CommandNames.AddItemCommand}" />
                         <Binding Source="{x:Static const:ViewNames.ItemAddView}" />
                     </MultiBinding>
                 </Button.CommandParameter>
@@ -57,9 +56,15 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Edit" 
-                                    Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                    CommandParameter="{Binding}" 
-                                    Margin="5" />
+                                    Command="{Binding DataContext.Command, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"                                    
+                                    Margin="5" >
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource CommandParameterConverter}">
+                                        <Binding Source="{x:Static const:CommandNames.EditItemCommand}" />
+                                        <Binding />
+                                    </MultiBinding>
+                                </Button.CommandParameter>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

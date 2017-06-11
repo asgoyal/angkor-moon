@@ -43,18 +43,14 @@ namespace AngkorMoon.Desktop
             _itemListViewModel = ContainerHelper.Container.Resolve<ItemListViewModel>();
             _partListViewModel = ContainerHelper.Container.Resolve<PartListViewModel>();
             _itemEditorViewModel = ContainerHelper.Container.Resolve<ItemEditorViewModel>();
-            
-            _itemListViewModel.EditItemRequested += NavToEditItemViewModel;
-            _itemListViewModel.NavRequested += OnNav;
-            _itemEditorViewModel.Done += OnNav;
         }
 
         protected override void RegisterActions(ICommandHandler handler)
         {
-            base.RegisterActions(handler);
-            handler.RegisterAction<string>("AddItemCommand", OnNav);
-            handler.RegisterAction<string>("ItemListCommand", OnNav);
-            handler.RegisterAction<Item>("EditItemCommand", NavToEditItemViewModel);
+            handler.RegisterAction<string>(CommandNames.AddItemCommand, OnNav);
+            handler.RegisterAction<string>(CommandNames.ItemListCommand, OnNav);
+            handler.RegisterAction<Item>(CommandNames.EditItemCommand, NavToEditItemViewModel);
+            handler.RegisterAction<string>(CommandNames.NavCommand, OnNav);
         }
 
         private void OnNav(string destination)
